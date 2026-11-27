@@ -23,6 +23,11 @@ body {
 	display: block;
 }
 
+#canvas[data-sideways="true"] {
+	transform-origin: top left;
+	transform: translateX(100vw) rotate(90deg);
+}
+
 #canvas:focus {
 	outline: none;
 }
@@ -91,8 +96,8 @@ body {
 	z-index: 1;
 }
 		</style>
-		<link id="-gd-engine-icon" rel="icon" type="image/png" href="briarwatch-b24c87cd7351.icon.png" />
-<link rel="apple-touch-icon" href="briarwatch-b24c87cd7351.apple-touch-icon.png"/>
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="briarwatch-4e81ac3de455.icon.png" />
+<link rel="apple-touch-icon" href="briarwatch-4e81ac3de455.apple-touch-icon.png"/>
 
 	</head>
 	<body>
@@ -105,14 +110,14 @@ body {
 		</noscript>
 
 		<div id="status">
-			<img id="status-splash" class="show-image--false fullsize--true use-filter--true" src="briarwatch-b24c87cd7351.png" alt="">
+			<img id="status-splash" class="show-image--false fullsize--true use-filter--true" src="briarwatch-4e81ac3de455.png" alt="">
 			<progress id="status-progress"></progress>
 			<div id="status-notice"></div>
 		</div>
 
-		<script src="briarwatch-b24c87cd7351.js"></script>
+		<script src="briarwatch-4e81ac3de455.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":0,"ensureCrossOriginIsolationHeaders":true,"executable":"briarwatch-b24c87cd7351","experimentalVK":false,"fileSizes":{"briarwatch-b24c87cd7351.pck":3053936,"briarwatch-b24c87cd7351.wasm":43699190},"focusCanvas":true,"gdextensionLibs":[]};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":0,"ensureCrossOriginIsolationHeaders":true,"executable":"briarwatch-4e81ac3de455","experimentalVK":false,"fileSizes":{"briarwatch-4e81ac3de455.pck":3053936,"briarwatch-4e81ac3de455.wasm":43699190},"focusCanvas":true,"gdextensionLibs":[]};
 const GODOT_THREADS_ENABLED = false;
 
 	const canvas = document.getElementById('canvas');
@@ -125,8 +130,13 @@ const GODOT_THREADS_ENABLED = false;
 
 	function fitCanvas() {
 		pendingResize = 0;
-		const width = Math.max(1, window.innerWidth);
-		const height = Math.max(1, window.innerHeight);
+			// Keep gameplay in landscape while the phone is upright.
+		const viewportWidth = Math.max(1, window.innerWidth);
+		const viewportHeight = Math.max(1, window.innerHeight);
+		const sideways = mobileDevice && viewportHeight > viewportWidth;
+		const width = sideways ? viewportHeight : viewportWidth;
+		const height = sideways ? viewportWidth : viewportHeight;
+		canvas.dataset.sideways = String(sideways);
 		const nativeScale = window.devicePixelRatio || 1;
 		// Keep the canvas's CSS size and hit targets independent of its backing resolution.
 		const mobileScale = Math.sqrt(mobilePixelBudget / (width * height));
