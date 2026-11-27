@@ -1,0 +1,9 @@
+Warden rifleman mesh
+
+The base sculpt was generated with Meshy 6 Lite from Briarwatch's original
+Warden sprite, then repaired, textured, decimated, rigged, and animated for
+this project.
+
+Source tool: Meshy (https://www.meshy.ai/)
+Base sculpt license: Creative Commons Attribution 4.0 International
+https://creativecommons.org/licenses/by/4.0/
