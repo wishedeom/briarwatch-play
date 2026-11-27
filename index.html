@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Based on the Godot 4.4.1 Web export template. See Godot-LICENSE.txt. -->
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -90,8 +91,8 @@ body {
 	z-index: 1;
 }
 		</style>
-		<link id="-gd-engine-icon" rel="icon" type="image/png" href="briarwatch-9e218ab25292.icon.png" />
-<link rel="apple-touch-icon" href="briarwatch-9e218ab25292.apple-touch-icon.png"/>
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="briarwatch-d9c02f9b3445.icon.png" />
+<link rel="apple-touch-icon" href="briarwatch-d9c02f9b3445.apple-touch-icon.png"/>
 
 	</head>
 	<body>
@@ -104,16 +105,50 @@ body {
 		</noscript>
 
 		<div id="status">
-			<img id="status-splash" class="show-image--false fullsize--true use-filter--true" src="briarwatch-9e218ab25292.png" alt="">
+			<img id="status-splash" class="show-image--false fullsize--true use-filter--true" src="briarwatch-d9c02f9b3445.png" alt="">
 			<progress id="status-progress"></progress>
 			<div id="status-notice"></div>
 		</div>
 
-		<script src="briarwatch-9e218ab25292.js"></script>
+		<script src="briarwatch-d9c02f9b3445.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":true,"executable":"briarwatch-9e218ab25292","experimentalVK":false,"fileSizes":{"briarwatch-9e218ab25292.pck":3035920,"briarwatch-9e218ab25292.wasm":43699190},"focusCanvas":true,"gdextensionLibs":[]};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":0,"ensureCrossOriginIsolationHeaders":true,"executable":"briarwatch-d9c02f9b3445","experimentalVK":false,"fileSizes":{"briarwatch-d9c02f9b3445.pck":3037360,"briarwatch-d9c02f9b3445.wasm":43699190},"focusCanvas":true,"gdextensionLibs":[]};
 const GODOT_THREADS_ENABLED = false;
-const engine = new Engine(GODOT_CONFIG);
+
+	const canvas = document.getElementById('canvas');
+	// iPadOS can report a desktop Safari user agent.
+	const mobileDevice = navigator.userAgentData?.mobile
+		|| /Android|iPhone|iPad|iPod/.test(navigator.userAgent)
+		|| (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+	const mobilePixelBudget = 430000;
+	let pendingResize = 0;
+
+	function fitCanvas() {
+		pendingResize = 0;
+		const width = Math.max(1, window.innerWidth);
+		const height = Math.max(1, window.innerHeight);
+		const nativeScale = window.devicePixelRatio || 1;
+		// Keep the canvas's CSS size and hit targets independent of its backing resolution.
+		const mobileScale = Math.sqrt(mobilePixelBudget / (width * height));
+		const scale = mobileDevice ? Math.min(nativeScale, mobileScale) : nativeScale;
+		const renderWidth = Math.max(1, Math.floor(width * scale));
+		const renderHeight = Math.max(1, Math.floor(height * scale));
+
+		canvas.style.width = width + 'px';
+		canvas.style.height = height + 'px';
+		if (canvas.width !== renderWidth) canvas.width = renderWidth;
+		if (canvas.height !== renderHeight) canvas.height = renderHeight;
+	}
+
+	function scheduleResize() {
+		if (!pendingResize) pendingResize = window.requestAnimationFrame(fitCanvas);
+	}
+
+	window.addEventListener('resize', scheduleResize);
+	fitCanvas();
+
+
+	const engine = new Engine(GODOT_CONFIG);
 
 (function () {
 	const statusOverlay = document.getElementById('status');
